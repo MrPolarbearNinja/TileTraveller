@@ -1,6 +1,6 @@
-
+posibleRouts = ""
 curentPlace = "11"
-forbitenRouts = "nwse"
+
 
 def update_place(move, curentPlace):
     if move == "n":
@@ -8,60 +8,76 @@ def update_place(move, curentPlace):
     elif move == "e":
         curentPlace = str(int(curentPlace) + 10)
     elif move == "s":
-        curentPlace = str(int(curentPlace) - 10)
-    elif move == "w":
         curentPlace = str(int(curentPlace) - 1)
+    elif move == "w":
+        curentPlace = str(int(curentPlace) - 10)
     return curentPlace
 
 
 def printPosibleDirections (placement):
     posible = ""
     writeLine = "You can travel: "
+    counter = 0
+    posibleRouts = ""
     
     if not(placement[1] == "3"):
         if not(placement[0] == "2" and placement[1] == "2"):
-            writeLine += "(N)orth "
+            writeLine += "(N)orth"
             posible += "n"
+            counter += 1
     if not(placement[0] == "3"):
         if not(placement[0] == "1" and placement[1] == "1"):
             if not(placement[0] == "2" and placement[1] == "2"):
                 if not(placement[0] == "2" and placement[1] == "1"):
-                    writeLine += "(E)ast "
+                    if(counter > 0):
+                        writeLine += " or "
+                    writeLine += "(E)ast"
                     posible += "e"
+                    counter += 1
     if not(placement[1] == "1"):
         if not(placement[0] == "2" and placement[1] == "3"):
-            writeLine += "(S)outh "
+            if(counter > 0):
+                writeLine += " or "
+            writeLine += "(S)outh"
             posible += "s"
+            counter += 1
     if not(placement[0] == "1"):
         if not(placement[0] == "2" and placement[1] == "1"):
             if not(placement[0] == "3" and placement[1] == "1"):
                 if not(placement[0] == "3" and placement[1] == "2"):
-                    writeLine += "(W)east "
+                    if(counter > 0):
+                        writeLine += " or "
+                    writeLine += "(W)est"
                     posible += "w"
-    print(writeLine)
-    updateForbiten(posible)
+    print(writeLine + ".")
+    posibleRouts = updateForbiten(posible, posibleRouts)
+    return posibleRouts
 
-def updateForbiten(fb_list):
-    forbitenRouts = fb_list
-def checkForbiden(WhatToCheck):
-    if(forbitenRouts.find(WhatToCheck) > 0):
+def updateForbiten(fb_list, posibleRouts):
+    posibleRouts = fb_list
+    return posibleRouts
+    
+def checkPosible(WhatToCheck):
+    if(WhatToCheck in posibleRouts):
+        return True
+    else:
         return False
-    return True
 
 
 while (True):
-    printPosibleDirections(curentPlace)
-
+    posibleRouts = printPosibleDirections(curentPlace)
     direction = input("Direction: ")
     direction = direction.lower()
 
     if not(direction == "n" or direction == "e" or direction == "s" or  direction == "w"):
         print("Not a valid direction!")
     else:
-        if not(checkForbiden(direction)):
-            print("Not a valid direction!")
-        else:
-            print("NEXT MOVE")
+        if(checkPosible(direction)):
             curentPlace = update_place(direction, curentPlace)
+        else:
+            print("Not a valid direction!")
+    if (curentPlace == "31"):
+        print("Victory!")
+        break
             
                       
